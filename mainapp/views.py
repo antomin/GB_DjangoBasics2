@@ -1,9 +1,15 @@
 from django.shortcuts import render
 
 
-def main(request):
-    return render(request, 'mainapp/index.html')
+def index(request):
+    context = {
+        'title': 'главная',
+    }
+    return render(request, 'mainapp/index.html', context)
 
 
 def products(request):
-    return render(request, 'mainapp/products.html')
+    context = {
+        'title': 'каталог',
+    }
+    return render(request, 'mainapp/products.html', context)
