@@ -11,6 +11,13 @@ def index(request):
 def products(request):
     context = {
         'title': 'каталог',
+        'categories': [
+            'новинки',
+            'одежда',
+            'обувь',
+            'аксессуары',
+            'подарки',
+        ],
         'products': [
             {
                 'name': 'Худи черного цвета с монограммами adidas Originals',
