@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
-from authapp.forms import ShopUserLoginForm
+from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm
 
 
 def login(request):
@@ -27,8 +27,17 @@ def login(request):
 
 
 def registration(request):
+    if request.method == 'POST':
+        form = ShopUserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('auth:login'))
+    else:
+        form = ShopUserRegistrationForm()
+
     context = {
-        'title': 'регистрация'
+        'title': 'регистрация',
+        'form': form,
     }
 
     return render(request, 'authapp/register.html', context)
