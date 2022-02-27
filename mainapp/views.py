@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.shortcuts import render
 from mainapp.models import Product, ProductCategory
 
@@ -14,7 +13,6 @@ def products(request):
     context = {
         'title': 'каталог',
         'categories': ProductCategory.objects.all(),
-        'products': Product.objects.all(),
-        'media_url': settings.MEDIA_URL,
+        'products': Product.objects.all()
     }
     return render(request, 'mainapp/products.html', context)
