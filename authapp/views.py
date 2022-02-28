@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse
 
 from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm

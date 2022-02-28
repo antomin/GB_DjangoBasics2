@@ -3,7 +3,7 @@ import json
 from django.core.management.base import BaseCommand
 
 from authapp.models import ShopUser
-from mainapp.models import ProductCategory, Product
+from mainapp.models import Product, ProductCategory
 
 
 def load_json(file):
