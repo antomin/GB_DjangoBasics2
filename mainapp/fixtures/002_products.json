@@ -1,7 +1,7 @@
 [
   {
     "model": "mainapp.product",
-    "pk": 2,
+    "pk": 1,
     "fields": {
       "name": "Худи черного цвета с монограммами adidas Originals",
       "category": 2,
@@ -13,7 +13,7 @@
   },
   {
     "model": "mainapp.product",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "name": "Синяя куртка The North Face",
       "category": 2,
@@ -25,7 +25,7 @@
   },
   {
     "model": "mainapp.product",
-    "pk": 4,
+    "pk": 3,
     "fields": {
       "name": "Коричневый спортивный oversized-топ ASOS DESIGN",
       "category": 2,
@@ -37,7 +37,7 @@
   },
   {
     "model": "mainapp.product",
-    "pk": 5,
+    "pk": 4,
     "fields": {
       "name": "Черный рюкзак Nike Heritage",
       "category": 4,
@@ -49,7 +49,7 @@
   },
   {
     "model": "mainapp.product",
-    "pk": 6,
+    "pk": 5,
     "fields": {
       "name": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
       "category": 3,
@@ -61,7 +61,7 @@
   },
   {
     "model": "mainapp.product",
-    "pk": 7,
+    "pk": 6,
     "fields": {
       "name": "Темно-синие широкие строгие брюки ASOS DESIGN",
       "category": 2,

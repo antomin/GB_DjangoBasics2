@@ -26,6 +26,7 @@ class Command(BaseCommand):
             new_product = product['fields']
             category = new_product['category']
             _category = ProductCategory.objects.get(id=category)
+            new_product['pk'] = product['pk']
             new_product['category'] = _category
             Product(**new_product).save()
 
