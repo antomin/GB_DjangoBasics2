@@ -1,8 +1,10 @@
-from django.contrib import auth
-from django.shortcuts import render, HttpResponseRedirect
+from django.contrib import auth, messages
+from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse
 
-from authapp.forms import ShopUserLoginForm, ShopUserRegistrationForm
+from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
+                           ShopUserRegistrationForm)
+from basketapp.models import Basket
 
 
 def login(request):
@@ -15,12 +17,10 @@ def login(request):
             if user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-    else:
-        form = ShopUserLoginForm()
 
     context = {
         'title': 'вход',
-        'form': form,
+        'form': ShopUserLoginForm(),
     }
 
     return render(request, 'authapp/login.html', context)
@@ -31,16 +31,33 @@ def registration(request):
         form = ShopUserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегистрировались')
             return HttpResponseRedirect(reverse('auth:login'))
-    else:
-        form = ShopUserRegistrationForm()
 
     context = {
         'title': 'регистрация',
-        'form': form,
+        'form': ShopUserRegistrationForm()
     }
 
     return render(request, 'authapp/register.html', context)
+
+
+def profile(request):
+    if request.method == 'POST':
+        form = ShopUserEditForm(instance=request.user, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные обновлены')
+        else:
+            print()
+            print(form.errors)
+
+    context = {
+        'title': 'профиль',
+        'form': ShopUserEditForm(instance=request.user),
+        'basket': Basket.objects.filter(user=request.user),
+    }
+    return render(request, 'authapp/profile.html', context)
 
 
 def logout(request):
