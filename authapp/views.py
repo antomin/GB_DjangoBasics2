@@ -46,8 +46,9 @@ def profile(request):
         form = ShopUserEditForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-            # messages.success(request, 'Данные обновлены')
+            messages.success(request, 'Данные обновлены')
         else:
+            print()
             print(form.errors)
 
     context = {
