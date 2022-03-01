@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
                            ShopUserRegistrationForm)
+from basketapp.models import Basket
 
 
 def login(request):
@@ -53,7 +54,8 @@ def profile(request):
 
     context = {
         'title': 'профиль',
-        'form': ShopUserEditForm(instance=request.user)
+        'form': ShopUserEditForm(instance=request.user),
+        'basket': Basket.objects.filter(user=request.user),
     }
     return render(request, 'authapp/profile.html', context)
 
