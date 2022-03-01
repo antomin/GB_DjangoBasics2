@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
                                        UserCreationForm)
-from django.forms import forms
+from django.forms import FileInput, forms
 
 from authapp.models import ShopUser
 
@@ -37,14 +37,15 @@ class ShopUserEditForm(UserChangeForm):
     class Meta:
         model = ShopUser
         fields = ('first_name', 'last_name', 'avatar', 'age', 'email', 'username')
+        widgets = {'avatar': FileInput()}
 
     def __init__(self, *args, **kwargs):
         super(ShopUserEditForm, self).__init__(*args, **kwargs)
         for field_name, fielld in self.fields.items():
             fielld.widget.attrs['class'] = 'form-control py-4'
         self.fields['avatar'].widget.attrs['class'] = 'custom-file-label'
-        self.fields['username'].widget.attrs['disabled'] = True
-        self.fields['email'].widget.attrs['disabled'] = True
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
 
     def clean_age(self):
         data = self.cleaned_data['age']
