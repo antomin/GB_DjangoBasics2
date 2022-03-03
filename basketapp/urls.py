@@ -5,6 +5,6 @@ import basketapp.views as basketapp
 app_name = 'basketapp'
 
 urlpatterns = [
-    path('add/<int:pk>', basketapp.basket_add, name='add'),
-    path('remove/<int:pk>', basketapp.basket_remove, name='remove'),
+    path('add/<int:product_pk>', basketapp.basket_add, name='add'),
+    path('remove/<int:basket_pk>', basketapp.basket_remove, name='remove'),
 ]
