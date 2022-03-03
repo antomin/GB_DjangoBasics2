@@ -47,16 +47,17 @@ def profile(request):
         form = ShopUserEditForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Данные обновлены')
+            messages.set_level(request, messages.SUCCESS)
+            messages.success(request, 'Данные обновлены', extra_tags='suc')
         else:
-            print()
-            print(form.errors)
+            messages.error(request, list(form.errors.values())[0])
 
     context = {
         'title': 'профиль',
         'form': ShopUserEditForm(instance=request.user),
         'basket': Basket.objects.filter(user=request.user),
     }
+
     return render(request, 'authapp/profile.html', context)
 
 
