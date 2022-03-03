@@ -11,16 +11,13 @@ class Basket(models.Model):
     created_ad = models.DateTimeField(verbose_name='время создания', auto_now_add=True)
     updated_ad = models.DateTimeField(verbose_name='время обновления', auto_now=True)
 
-    @property
     def item_sum(self):
         return self.quantity * self.product.price
 
-    @property
     def total_sum(self):
         all_baskets = Basket.objects.filter(user=self.user)
         return sum(basket.item_sum() for basket in all_baskets)
 
-    @property
     def total_quantity(self):
         all_baskets = Basket.objects.filter(user=self.user)
         return sum(basket.quantity for basket in all_baskets)
