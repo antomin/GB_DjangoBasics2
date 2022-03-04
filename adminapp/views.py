@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from authapp.models import ShopUser
-from mainapp.models import ProductCategory
+from mainapp.models import Product, ProductCategory
 
 
 def index(request):
@@ -52,8 +52,8 @@ def category_delete(request):
 
 def product_read(request):
     context = {
-        'title': 'Категории',
-        'categories': ProductCategory.objects.all().order_by('-is_active', 'name'),
+        'title': 'Все продукты',
+        'products': Product.objects.all().order_by('-is_active', '-category__name', 'name'),
     }
 
     return render(request, 'adminapp/products.html', context)

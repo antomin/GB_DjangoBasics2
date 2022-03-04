@@ -15,7 +15,6 @@
                             <thead>
                             <tr>
                                 <th>Имя</th>
-                                <th>Описание</th>
                                 <th>Активная</th>
                             </tr>
                             </thead>
@@ -23,7 +22,6 @@
                            {% for category in categories %}
                             <tr>
                                 <td><a href="{% url 'admin:category_edit' category.pk %}" style="color: dodgerblue">{{ category.name | title }}</a></td>
-                                <td>{{ category.name }}</td>
                                 <td class="text-center"><i class="fas fa-{% if user.is_active %}check{% else %}times{% endif %}-circle"></i></td>
                             </tr>
                             {% endfor %}
