@@ -28,7 +28,8 @@
                             <li class="list-group-item">В наличии: {{ product.quantity }}</li>
                         </ul>
                         <div class="card-footer text-center">
-                            <a class="btn btn-outline-success" href="{% url 'basket:add' product.pk %}">Отправить в корзину</a>
+                            <a class="btn btn-outline-success" href="{% url 'basket:add' product.pk %}">Отправить в
+                                корзину</a>
                         </div>
                     </div>
                 </div>
@@ -40,9 +41,5 @@
 {% endblock content %}
 
 {% block footer %}
-    <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
-        </div>
-    </footer>
+    {% include 'mainapp/includes/inc_footer.html' %}
 {% endblock footer %}
