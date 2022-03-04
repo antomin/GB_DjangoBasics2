@@ -3,53 +3,45 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Создание пользователя</h1>
-            <form action="">
+            <h1 class="mt-4">Создание товара</h1>
+            <form action="{% url 'admin:product_create' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="form-row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="small mb-1" for="inputFirstName">Имя</label>
-                            <input class="form-control py-4" id="inputFirstName" type="text"/>
+                            <label class="small mb-1" for="{{ form.name.id_for_label }}">Имя</label>
+                            {{ form.name }}
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="small mb-1" for="inputLastName">Фамилия</label>
-                            <input class="form-control py-4" id="inputLastName" type="text"/>
+                            <label class="small mb-1" for="{{ form.category.id_for_label }}">Категория</label>
+                            {{ form.category }}
                         </div>
                     </div>
                 </div>
                 <div class="form-row mb-2">
                     <div class="col-lg-12">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="userAvatar" size="50">
-                            <label class="custom-file-label" for="userAvatar">Выберите изображение</label>
+                            {{ form.image_url }}
+                            <label class="custom-file-label" for="{{ form.image_url.id_for_label }}">Выберите изображение</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-lg-6">
-                        <label class="small mb-1" for="inputUsername">Имя пользователя</label>
-                        <input class="form-control py-4" id="inputUsername" type="text"
-                               aria-describedby="usernameHelp"/>
-                    </div>
-                    <div class="col-lg-6">
-                        <label class="small mb-1" for="inputEmailAddress">Адрес электронной
-                            почты</label>
-                        <input class="form-control py-4" id="inputEmailAddress" type="email"
-                               aria-describedby="emailHelp"/>
+                <div class="form-row mb-2">
+                    <div class="col-lg-12">
+                        <label class="small mb-1" for="{{ form.description.id_for_label }}">Описание</label>
+                        {{ form.description }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-lg-6">
-                        <label class="small mb-1" for="inputPassword1">Пароль</label>
-                        <input class="form-control py-4" id="inputPassword1" type="text"
-                               aria-describedby="password1Help"/>
+                        <label class="small mb-1" for="{{ form.price.id_for_label }}">Цена</label>
+                        {{ form.price }}
                     </div>
-                    <div class="col-lg-6">
-                        <label class="small mb-1" for="inputPassword2">Повторите пароль</label>
-                        <input class="form-control py-4" id="inputPassword2" type="text"
-                               aria-describedby="password2Help"/>
+                    <div class="col-lg-2">
+                        <label class="small mb-1" for="{{ form.quantity.id_for_label }}">Количество</label>
+                        {{ form.quantity }}
                     </div>
                 </div>
                 <div class="form-row">

@@ -3,7 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from adminapp.forms import CategoryCreationAdminForm, UserCreationAdminForm
+from adminapp.forms import (CategoryCreationAdminForm,
+                            ProductCreationAdminForm, UserCreationAdminForm)
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
@@ -101,7 +102,20 @@ def product_read(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def product_create(request):
-    return render(request, 'adminapp/products_create.html')
+    if request.method == 'POST':
+        form = ProductCreationAdminForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin:product_view'))
+        else:
+            print(form.errors)
+
+    context = {
+        'title': 'Новый продукт',
+        'form': ProductCreationAdminForm(),
+    }
+
+    return render(request, 'adminapp/products_create.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
