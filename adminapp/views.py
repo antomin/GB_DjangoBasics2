@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from adminapp.forms import UserCreationAdminForm
+from adminapp.forms import CategoryCreationAdminForm, UserCreationAdminForm
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
@@ -31,13 +31,11 @@ def user_create(request):
             form.save()
             return HttpResponseRedirect(reverse('admin:user_view'))
         else:
-            print(form.error)
-    else:
-        form = UserCreationAdminForm()
+            print(form.errors)
 
     context = {
         'title': 'Новый пользователь',
-        'form': form,
+        'form': UserCreationAdminForm(),
     }
 
     return render(request, 'adminapp/users_create.html', context)
@@ -65,7 +63,20 @@ def category_read(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def category_create(request):
-    return render(request, 'adminapp/categories_create.html')
+    if request.method == 'POST':
+        form = CategoryCreationAdminForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin:category_view'))
+        else:
+            print(form.errors)
+
+    context = {
+        'title': 'Новая категория',
+        'form': CategoryCreationAdminForm()
+    }
+
+    return render(request, 'adminapp/categories_create.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
