@@ -3,44 +3,30 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Редактирование пользователя | valeriy</h1>
+            <h1 class="mt-4">Редактирование категории {{ edited_category.name }}</h1>
             <div class="card-body">
-                <form action="">
+                <form action="{% url 'admin:category_edit' edited_category.pk %}" method="post">
+                    {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="small mb-1" for="inputFirstName">Имя</label>
-                                <input class="form-control py-4" id="inputFirstName" type="text" value="Николай"/>
+                                <label class="small mb-1" for="{{ form.name.id_for_label }}">Имя</label>
+                                {{ form.name }}
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-1 text-center">
                             <div class="form-group">
-                                <label class="small mb-1" for="inputLastName">Фамилия</label>
-                                <input class="form-control py-4" id="inputLastName" type="text" value="Нагорный"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row mb-2">
-                        <div class="col-lg-12">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="userAvatar" size="50">
-                                <label class="custom-file-label" for="userAvatar">Выберите изображение</label>
+                                <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Активна</label>
+                                {{ form.is_active }}
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col-lg-6">
-                            <label class="small mb-1" for="inputUsername">Имя пользователя</label>
-                            <input class="form-control py-4" id="inputUsername" type="text"
-                                   aria-describedby="usernameHelp"
-                                   value="nikolay"/>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="small mb-1" for="inputEmailAddress">Адрес электронной
-                                почты</label>
-                            <input class="form-control py-4" id="inputEmailAddress" type="email"
-                                   aria-describedby="emailHelp"
-                                   value="isp06@mail.ru"/>
+                            <div class="form-group">
+                                <label class="small mb-1" for="{{ form.description.id_for_label }}">Описание</label>
+                                {{ form.description }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -51,7 +37,7 @@
                 </form>
                 <div class="row">
                     <div class="col-lg-12" style="margin-top: 33px;">
-                        <input class="btn btn-danger btn-block" type="submit" value="Удалить">
+                        <a class="btn btn-danger btn-block" href="{% url 'admin:category_delete' edited_category.pk %}">Удалить</a>
                     </div>
                 </div>
             </div>

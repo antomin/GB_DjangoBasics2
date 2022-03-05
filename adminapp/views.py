@@ -65,8 +65,6 @@ def user_edit(request, user_pk):
 
     return render(request, 'adminapp/users_edit.html', context)
 
-# Ощибка при сохранении формы
-
 
 @user_passes_test(lambda u: u.is_superuser)
 def user_delete(request, user_pk):
@@ -113,13 +111,38 @@ def category_create(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def category_edit(request):
-    return render(request, 'adminapp/categories_edit.html')
+def category_edit(request, category_pk):
+    edited_category = get_object_or_404(ProductCategory, pk=category_pk)
+    if request.method == 'POST':
+        form = CategoryCreationAdminForm(data=request.POST, instance=edited_category)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin:category_view'))
+        else:
+            print(form.errors)
+
+    context = {
+        'title': f'Редактирование категории {edited_category.name}',
+        'form': CategoryCreationAdminForm(instance=edited_category),
+        'edited_category': edited_category
+    }
+
+    return render(request, 'adminapp/categories_edit.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_delete(request):
-    return render(request, 'adminapp/categories_delete.html')
+def category_delete(request, category_pk):
+    deleted_category = get_object_or_404(ProductCategory, pk=category_pk)
+    if request.method == 'POST':
+        deleted_category.is_active = False
+        deleted_category.save()
+        return HttpResponseRedirect(reverse('admin:category_view'))
+
+    context = {
+        'title': 'Удаление пользователя',
+        'deleted_category': deleted_category,
+    }
+
+    return render(request, 'adminapp/categories_delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
