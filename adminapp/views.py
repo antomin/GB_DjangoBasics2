@@ -174,9 +174,35 @@ def product_create(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def product_edit(request):
-    return render(request, 'adminapp/products_edit.html')
+def product_edit(request, product_pk):
+    edited_product = get_object_or_404(Product, pk=product_pk)
+    if request.method == 'POST':
+        form = ProductCreationAdminForm(data=request.POST, instance=edited_product, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin:product_view'))
+        else:
+            print(form.errors)
+
+    context = {
+        'title': f'Редактирование категории {edited_product.name}',
+        'form': ProductCreationAdminForm(instance=edited_product),
+        'edited_product': edited_product
+    }
+
+    return render(request, 'adminapp/products_edit.html', context)
 
 
-def product_delete(request, user_pk):
-    return render(request, 'adminapp/products_delete.html')
+def product_delete(request, product_pk):
+    deleted_product = get_object_or_404(Product, pk=product_pk)
+    if request.method == 'POST':
+        deleted_product.is_active = False
+        deleted_product.save()
+        return HttpResponseRedirect(reverse('admin:product_view'))
+
+    context = {
+        'title': 'Удаление пользователя',
+        'deleted_product': deleted_product,
+    }
+
+    return render(request, 'adminapp/products_delete.html', context)

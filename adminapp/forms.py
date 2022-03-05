@@ -43,7 +43,8 @@ class CategoryCreationAdminForm(forms.ModelForm):
 class ProductCreationAdminForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'category', 'description', 'image_url', 'price', 'quantity')
+        fields = ('name', 'category', 'description', 'image_url', 'price', 'quantity', 'is_active')
+        widgets = {'image_url': FileInput()}
 
     def __init__(self, *args, **kwargs):
         super(ProductCreationAdminForm, self).__init__(*args, **kwargs)
