@@ -24,8 +24,8 @@
                             </thead>
                             <tbody>
                            {% for user in users %}
-                            <tr>
-                                <td><a href="{% url 'admin:user_edit' user.pk %}" style="color: dodgerblue">{{ user.username }}</a></td>
+                            <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
+                                <td><a class="{% if not user.is_active %}text-muted{% endif %}" href="{% url 'admin:user_edit' user.pk %}" style="color: dodgerblue">{{ user.username }}</a></td>
                                 <td>{{ user.first_name }}</td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.email }}</td>

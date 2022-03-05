@@ -20,8 +20,8 @@
                             </thead>
                             <tbody>
                            {% for category in categories %}
-                            <tr>
-                                <td><a href="{% url 'admin:category_edit' category.pk %}" style="color: dodgerblue">{{ category.name | title }}</a></td>
+                            <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
+                                <td><a class="{% if not user.is_active %}text-muted{% endif %}" href="{% url 'admin:category_edit' category.pk %}" style="color: dodgerblue">{{ category.name | title }}</a></td>
                                 <td class="text-center"><i class="fas fa-{% if category.is_active %}check{% else %}times{% endif %}-circle"></i></td>
                             </tr>
                             {% endfor %}

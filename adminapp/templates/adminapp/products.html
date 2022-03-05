@@ -24,8 +24,8 @@
                             </thead>
                             <tbody>
                            {% for product in products %}
-                            <tr>
-                                <td><a href="{% url 'admin:product_edit' product.pk %}" style="color: dodgerblue">{{ product.name }}</a></td>
+                            <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
+                                <td><a class="{% if not user.is_active %}text-muted{% endif %}"href="{% url 'admin:product_edit' product.pk %}" style="color: dodgerblue">{{ product.name }}</a></td>
                                 <td>{{ product.category }}</td>
                                 <td>{{ product.description }}</td>
                                 <td>{{ product.price }}</td>
