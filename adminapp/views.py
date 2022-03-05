@@ -1,24 +1,28 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from adminapp.forms import (CategoryCreationAdminForm,
-                            ProductCreationAdminForm, UserCreationAdminForm)
+                            ProductCreationAdminForm, UserCreationAdminForm,
+                            UserEditAdminForm)
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
-    return render(request, 'adminapp/admin.html')
+    context = {
+        'title': 'Панель администратора'
+    }
+    return render(request, 'adminapp/admin.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def user_read(request):
     context = {
         'title': 'Пользователи',
-        'users': ShopUser.objects.all().order_by('-is_active', '-is_staff', 'username'),
+        'users': ShopUser.objects.all()
     }
 
     return render(request, 'adminapp/users.html', context)
@@ -43,13 +47,41 @@ def user_create(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def user_edit(request):
-    return render(request, 'adminapp/users_edit.html')
+def user_edit(request, user_pk):
+    edited_user = get_object_or_404(ShopUser, pk=user_pk)
+    if request.method == 'POST':
+        form = UserEditAdminForm(data=request.POST, instance=edited_user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin:user_view'))
+        else:
+            print(form.errors)
+
+    context = {
+        'title': f'Редактирование пользователя {edited_user.username}',
+        'form': UserEditAdminForm(instance=edited_user),
+        'edited_user': edited_user
+    }
+
+    return render(request, 'adminapp/users_edit.html', context)
+
+# Ощибка при сохранении формы
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def user_delete(request, user_pk):
-    return render(request, 'adminapp/users_edit.html')
+    deleted_user = get_object_or_404(ShopUser, pk=user_pk)
+    if request.method == 'POST':
+        deleted_user.is_active = False
+        deleted_user.save()
+        return HttpResponseRedirect(reverse('admin:user_view'))
+
+    context = {
+        'title': 'Удаление пользователя',
+        'deleted_user': deleted_user,
+    }
+
+    return render(request, 'adminapp/users_delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)

@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import FileInput
 
-from authapp.forms import ShopUserRegistrationForm
+from authapp.forms import ShopUserEditForm, ShopUserRegistrationForm
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
@@ -13,6 +14,19 @@ class UserCreationAdminForm(ShopUserRegistrationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationAdminForm, self).__init__( *args, **kwargs)
         self.fields['avatar'].widget.attrs['class'] = 'custom-file-label'
+
+
+class UserEditAdminForm(ShopUserEditForm):
+    def __init__(self, *args, **kwargs):
+        super(ShopUserEditForm, self).__init__(*args, **kwargs)
+        for field_name, fielld in self.fields.items():
+            fielld.widget.attrs['class'] = 'form-control py-4'
+        self.fields['avatar'].widget.attrs['class'] = 'custom-file-label'
+
+    class Meta:
+        model = ShopUser
+        fields = ('first_name', 'last_name', 'avatar', 'age', 'email', 'username', 'is_active', 'is_staff')
+        widgets = {'avatar': FileInput()}
 
 
 class CategoryCreationAdminForm(forms.ModelForm):
