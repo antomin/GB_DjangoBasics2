@@ -1,0 +1,17 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <h1 class="mt-4">Удаление продукта {{ deleted_product.name }}</h1>
+        </div>
+        <form action="{% url 'admin:product_delete' deleted_product.pk %}" method="post">
+            {% csrf_token %}
+            <div class="row text-center">
+                <div class="col-lg-6 ml-3" style="margin-top: 33px;">
+                    <input class="btn btn-danger btn-block" type="submit" value="Удалить">
+                </div>
+            </div>
+        </form>
+    </main>
+{% endblock content %}
