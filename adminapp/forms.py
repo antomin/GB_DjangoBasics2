@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import FileInput
+from django.forms import ChoiceField, FileInput
 
 from authapp.forms import ShopUserEditForm, ShopUserRegistrationForm
 from authapp.models import ShopUser
