@@ -12,11 +12,16 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request):
+def products(request, category_pk=None):
+    if category_pk:
+        products_list = Product.objects.filter(category__pk=category_pk)
+    else:
+        products_list = Product.objects.all()
+
     context = {
         'title': 'каталог',
         'categories': ProductCategory.objects.all(),
-        'products': Product.objects.all(),
+        'products': products_list,
         'basket': Basket.objects.filter(user=request.user),
     }
 
