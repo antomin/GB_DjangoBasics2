@@ -13,13 +13,16 @@
             <div class="col-lg-3">
 
                 <h1 class="my-4">GeekShop</h1>
-                <div class="list-group mb-1">
-                    <a href="{% url 'products:index' %}" class="list-group-item">Все</a>
-                </div>
-                <div class="list-group">
-                    {% for category in categories %}
-                        <a href="{% url 'mainapp:products' category.pk %}" class="list-group-item">{{ category|title }}</a>
-                    {% endfor %}
+                <div class="category-menu">
+                    <div class="list-group mb-1">
+                        <a href="{% url 'products:index' %}" class="list-group-item">Все</a>
+                    </div>
+                    <div class="list-group">
+                        {% for category in categories %}
+                            <a href="{% url 'mainapp:products' category.pk %}"
+                               class="list-group-item">{{ category|title }}</a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 
@@ -55,7 +58,9 @@
                     </a>
                 </div>
 
-                {% include 'mainapp/includes/inc_product_list.html' %}
+                <div class="products-list">
+                    {% include 'mainapp/includes/inc_product_list.html' %}
+                </div>
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
@@ -81,3 +86,7 @@
 {% block footer %}
     {% include 'mainapp/includes/inc_footer.html' %}
 {% endblock footer %}
+
+{% block js %}
+    <script src="{% static 'js/products_script.js' %}"></script>
+{% endblock js %}
