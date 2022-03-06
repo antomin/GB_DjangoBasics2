@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('mainapp', '0001_productcategory'),
     ]
@@ -20,7 +19,8 @@ class Migration(migrations.Migration):
                 ('image_url', models.ImageField(blank=True, upload_to='products_images')),
                 ('price', models.DecimalField(decimal_places=2, default=0, max_digits=8, verbose_name='цена продукта')),
                 ('quantity', models.PositiveIntegerField(default=0, verbose_name='количество')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.productcategory')),
+                ('category',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.productcategory')),
             ],
         ),
     ]

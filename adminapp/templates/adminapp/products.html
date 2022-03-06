@@ -23,15 +23,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                           {% for product in products %}
-                            <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
-                                <td><a class="{% if not user.is_active %}text-muted{% endif %}"href="{% url 'admin:product_edit' product.pk %}" style="color: dodgerblue">{{ product.name }}</a></td>
-                                <td>{{ product.category }}</td>
-                                <td>{{ product.description }}</td>
-                                <td>{{ product.price }}</td>
-                                <td>{{ product.quantity }}</td>
-                                <td class="text-center"><i class="fas fa-{% if product.is_active %}check{% else %}times{% endif %}-circle"></i></td>
-                            </tr>
+                            {% for product in products %}
+                                <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
+                                    <td><a class="{% if not user.is_active %}text-muted{% endif %}"
+                                           href="{% url 'admin:product_edit' product.pk %}"
+                                           style="color: dodgerblue">{{ product.name }}</a></td>
+                                    <td>{{ product.category }}</td>
+                                    <td>{{ product.description }}</td>
+                                    <td>{{ product.price }}</td>
+                                    <td>{{ product.quantity }}</td>
+                                    <td class="text-center"><i
+                                            class="fas fa-{% if product.is_active %}check{% else %}times{% endif %}-circle"></i>
+                                    </td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>

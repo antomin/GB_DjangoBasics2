@@ -23,15 +23,21 @@
                             </tr>
                             </thead>
                             <tbody>
-                           {% for user in users %}
-                            <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
-                                <td><a class="{% if not user.is_active %}text-muted{% endif %}" href="{% url 'admin:user_edit' user.pk %}" style="color: dodgerblue">{{ user.username }}</a></td>
-                                <td>{{ user.first_name }}</td>
-                                <td>{{ user.last_name }}</td>
-                                <td>{{ user.email }}</td>
-                                <td class="text-center"><i class="fas fa-{% if user.is_staff %}check{% else %}times{% endif %}-circle"></i></td>
-                                <td class="text-center"><i class="fas fa-{% if user.is_active %}check{% else %}times{% endif %}-circle"></i></td>
-                            </tr>
+                            {% for user in users %}
+                                <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
+                                    <td><a class="{% if not user.is_active %}text-muted{% endif %}"
+                                           href="{% url 'admin:user_edit' user.pk %}"
+                                           style="color: dodgerblue">{{ user.username }}</a></td>
+                                    <td>{{ user.first_name }}</td>
+                                    <td>{{ user.last_name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td class="text-center"><i
+                                            class="fas fa-{% if user.is_staff %}check{% else %}times{% endif %}-circle"></i>
+                                    </td>
+                                    <td class="text-center"><i
+                                            class="fas fa-{% if user.is_active %}check{% else %}times{% endif %}-circle"></i>
+                                    </td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>

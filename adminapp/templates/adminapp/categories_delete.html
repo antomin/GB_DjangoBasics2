@@ -2,7 +2,8 @@
 
 {% block content %}
     <main>
-        <<div class="container-fluid">
+        <
+        <div class="container-fluid">
             <h1 class="mt-4">Удаление категории {{ deleted_category.name }}</h1>
         </div>
         <form action="{% url 'admin:category_delete' deleted_category.pk %}" method="post">

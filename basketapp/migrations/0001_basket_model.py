@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -23,7 +22,8 @@ class Migration(migrations.Migration):
                 ('created_ad', models.DateTimeField(auto_now_add=True, verbose_name='время создания')),
                 ('updated_ad', models.DateTimeField(auto_now=True, verbose_name='время обновления')),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.product')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='basket', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='basket',
+                                           to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
