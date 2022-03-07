@@ -1,0 +1,11 @@
+<div class="category-menu">
+    <div class="list-group mb-1">
+        <a href="{% url 'products:index' %}" class="list-group-item {% if not request.resolver_match.kwargs.pk %}active{% endif %}">Все</a>
+    </div>
+    <div class="list-group">
+        {% for category in categories %}
+            <a href="{% url 'mainapp:products' category.pk %}"
+               class="list-group-item {% if request.resolver_match.kwargs.pk == category.pk %}active{% endif %}">{{ category|title }}</a>
+        {% endfor %}
+    </div>
+</div>
