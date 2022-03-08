@@ -29,13 +29,13 @@ class ShopUserEditAdminForm(ShopUserEditForm):
         widgets = {'avatar': FileInput()}
 
 
-class CategoryCreationAdminForm(forms.ModelForm):
+class ProductCategoryCreateForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
         fields = ('name', 'description', 'is_active')
 
     def __init__(self, *args, **kwargs):
-        super(CategoryCreationAdminForm, self).__init__(*args, **kwargs)
+        super(ProductCategoryCreateForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 

@@ -9,6 +9,10 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
 
 class Product(models.Model):
     name = models.CharField(verbose_name='имя', max_length=128, unique=True)

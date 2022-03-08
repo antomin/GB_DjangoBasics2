@@ -2,11 +2,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, ListView,
                                   TemplateView, UpdateView)
 
-from adminapp.forms import (CategoryCreationAdminForm,
+from adminapp.forms import (ProductCategoryCreateForm,
                             ProductCreationAdminForm, ShopUserCreateAdminForm,
                             ShopUserEditAdminForm)
 from authapp.models import ShopUser
@@ -18,19 +17,11 @@ class Index(TemplateView, AddContextMixin, SuperUserRequiredMixin):
     template_name = 'adminapp/admin.html'
     title = 'Панель администратора'
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(Index, self).dispatch(request, *args, **kwargs)
-
 
 class ShopUserListView(ListView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
     template_name = 'adminapp/shopuser_list.html'
     title = 'Пользователи'
-
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ShopUserListView, self).dispatch(request, *args, **kwargs)
 
 
 class ShopUserCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
@@ -40,10 +31,6 @@ class ShopUserCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
     success_url = reverse_lazy('admin:user_view')
     title = 'Новый пользователь'
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ShopUserCreateView, self).dispatch(request, *args, **kwargs)
-
 
 class ShopUserUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
@@ -52,10 +39,6 @@ class ShopUserUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
     success_url = reverse_lazy('admin:user_view')
     title = 'Редактирование пользователя'
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ShopUserUpdateView, self).dispatch(request, *args, **kwargs)
-
 
 class ShopUserDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
@@ -63,72 +46,48 @@ class ShopUserDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
     success_url = reverse_lazy('admin:user_view')
     title = 'Удаление пользователя'
 
-    @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    def dispatch(self, request, *args, **kwargs):
-        return super(ShopUserDeleteView, self).dispatch(request, *args, **kwargs)
+
+class ProductCategoryListView(ListView, AddContextMixin, SuperUserRequiredMixin):
+    model = ProductCategory
+    template_name = 'adminapp/productcategory_list.html'
+    title = 'Категории'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_read(request):
-    context = {
-        'title': 'Категории',
-        'categories': ProductCategory.objects.all().order_by('-is_active', 'name'),
-    }
-
-    return render(request, 'adminapp/categories.html', context)
+class ProductCategoryCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
+    model = ProductCategory
+    form_class = ProductCategoryCreateForm
+    template_name = 'adminapp/productcategory_create.html'
+    success_url = reverse_lazy('admin:category_view')
+    title = 'Новая категория'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_create(request):
-    if request.method == 'POST':
-        form = CategoryCreationAdminForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admin:category_view'))
-        else:
-            print(form.errors)
-
-    context = {
-        'title': 'Новая категория',
-        'form': CategoryCreationAdminForm()
-    }
-
-    return render(request, 'adminapp/categories_create.html', context)
+class ProductCategoryUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
+    model = ProductCategory
+    form_class = ProductCategoryCreateForm
+    template_name = 'adminapp/productcategory_edit.html'
+    success_url = reverse_lazy('admin:category_view')
+    title = 'Редактирование категории'
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_edit(request, category_pk):
-    edited_category = get_object_or_404(ProductCategory, pk=category_pk)
-    if request.method == 'POST':
-        form = CategoryCreationAdminForm(data=request.POST, instance=edited_category)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admin:category_view'))
-        else:
-            print(form.errors)
+class ProductCategoryDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
+    model = ProductCategory
+    template_name = 'adminapp/productcategory_delete.html'
+    success_url = reverse_lazy('admin:category_view')
+    title = 'Удаление категории'
 
-    context = {
-        'title': f'Редактирование категории {edited_category.name}',
-        'form': CategoryCreationAdminForm(instance=edited_category),
-        'edited_category': edited_category
-    }
-
-    return render(request, 'adminapp/categories_edit.html', context)
-
-
-def category_delete(request, category_pk):
-    deleted_category = get_object_or_404(ProductCategory, pk=category_pk)
-    if request.method == 'POST':
-        deleted_category.is_active = False
-        deleted_category.save()
-        return HttpResponseRedirect(reverse('admin:category_view'))
-
-    context = {
-        'title': 'Удаление пользователя',
-        'deleted_category': deleted_category,
-    }
-
-    return render(request, 'adminapp/categories_delete.html', context)
+# def category_delete(request, pk):
+#     deleted_category = get_object_or_404(ProductCategory, pk=pk)
+#     if request.method == 'POST':
+#         deleted_category.is_active = False
+#         deleted_category.save()
+#         return HttpResponseRedirect(reverse('admin:category_view'))
+#
+#     context = {
+#         'title': 'Удаление пользователя',
+#         'deleted_category': deleted_category,
+#     }
+#
+#     return render(request, 'adminapp/productcategory_delete.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)

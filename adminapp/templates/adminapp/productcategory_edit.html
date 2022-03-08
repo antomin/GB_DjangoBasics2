@@ -3,9 +3,10 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Редактирование категории {{ edited_category.name }}</h1>
+
+            <h1 class="mt-4">Редактирование категории {{ object.name }}</h1>
             <div class="card-body">
-                <form action="{% url 'admin:category_edit' edited_category.pk %}" method="post">
+                <form action="{% url 'admin:category_edit' object.pk %}" method="post">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">
@@ -35,11 +36,13 @@
                         </div>
                     </div>
                 </form>
+                {% if object.is_active %}
                 <div class="row">
                     <div class="col-lg-12" style="margin-top: 33px;">
-                        <a class="btn btn-danger btn-block" href="{% url 'admin:category_delete' edited_category.pk %}">Удалить</a>
+                        <a class="btn btn-danger btn-block" href="{% url 'admin:category_delete' object.pk %}">Удалить</a>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </main>
