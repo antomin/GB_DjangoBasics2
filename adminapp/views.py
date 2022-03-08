@@ -5,101 +5,101 @@ from django.views.generic import (CreateView, DeleteView, ListView,
 from adminapp.forms import (ProductCategoryCreateForm, ProductCreateForm,
                             ShopUserCreateAdminForm, ShopUserEditAdminForm)
 from authapp.models import ShopUser
-from mainapp.mixin import AddContextMixin, SuperUserRequiredMixin
+from mainapp.mixin import SuperUserRequiredMixin
 from mainapp.models import Product, ProductCategory
 
 
-class Index(TemplateView, AddContextMixin, SuperUserRequiredMixin):
+class Index(TemplateView, SuperUserRequiredMixin):
     template_name = 'adminapp/admin.html'
-    title = 'Панель администратора'
+    extra_context = {'title': 'Панель администратора'}
 
 
-class ShopUserListView(ListView, AddContextMixin, SuperUserRequiredMixin):
+class ShopUserListView(ListView, SuperUserRequiredMixin):
     model = ShopUser
     template_name = 'adminapp/shopuser_list.html'
     ordering = ['-is_active', 'name']
-    title = 'Пользователи'
+    extra_context = {'title': 'Пользователи'}
 
 
-class ShopUserCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
+class ShopUserCreateView(CreateView, SuperUserRequiredMixin):
     model = ShopUser
     form_class = ShopUserCreateAdminForm
     template_name = 'adminapp/shopuser_create.html'
     success_url = reverse_lazy('admin:user_view')
-    title = 'Новый пользователь'
+    extra_context = {'title': 'Новый пользователь'}
 
 
-class ShopUserUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
+class ShopUserUpdateView(UpdateView, SuperUserRequiredMixin):
     model = ShopUser
     form_class = ShopUserEditAdminForm
     template_name = 'adminapp/shopuser_update.html'
     success_url = reverse_lazy('admin:user_view')
-    title = 'Редактирование пользователя'
+    extra_context = {'title': 'Редактирование пользователя'}
 
 
-class ShopUserDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
+class ShopUserDeleteView(DeleteView, SuperUserRequiredMixin):
     model = ShopUser
     template_name = 'adminapp/shopuser_delete.html'
     success_url = reverse_lazy('admin:user_view')
-    title = 'Удаление пользователя'
+    extra_context = {'title': 'Удаление пользователя'}
 
 
-class ProductCategoryListView(ListView, AddContextMixin, SuperUserRequiredMixin):
+class ProductCategoryListView(ListView, SuperUserRequiredMixin):
     model = ProductCategory
     template_name = 'adminapp/productcategory_list.html'
     ordering = ['-is_active', 'name']
-    title = 'Категории'
+    extra_context = {'title': 'Категории'}
 
 
-class ProductCategoryCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
+class ProductCategoryCreateView(CreateView, SuperUserRequiredMixin):
     model = ProductCategory
     form_class = ProductCategoryCreateForm
     template_name = 'adminapp/productcategory_create.html'
     success_url = reverse_lazy('admin:category_view')
-    title = 'Новая категория'
+    extra_context = {'title': 'Новая категория'}
 
 
-class ProductCategoryUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
+class ProductCategoryUpdateView(UpdateView, SuperUserRequiredMixin):
     model = ProductCategory
     form_class = ProductCategoryCreateForm
     template_name = 'adminapp/productcategory_edit.html'
     success_url = reverse_lazy('admin:category_view')
-    title = 'Редактирование категории'
+    extra_context = {'title': 'Редактирование категории'}
 
 
-class ProductCategoryDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
+class ProductCategoryDeleteView(DeleteView, SuperUserRequiredMixin):
     model = ProductCategory
     template_name = 'adminapp/productcategory_delete.html'
     success_url = reverse_lazy('admin:category_view')
-    title = 'Удаление категории'
+    extra_context = {'title': 'Удаление категории'}
 
 
-class ProductListView(ListView, AddContextMixin, SuperUserRequiredMixin):
+class ProductListView(ListView, SuperUserRequiredMixin):
     model = Product
     template_name = 'adminapp/product_list.html'
     ordering = ['-is_active', 'name']
-    title = 'Продукты'
+    extra_context = {'title': 'Продукты'}
 
 
-class ProductCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
+class ProductCreateView(CreateView, SuperUserRequiredMixin):
     model = Product
     form_class = ProductCreateForm
     template_name = 'adminapp/product_create.html'
     success_url = reverse_lazy('admin:product_view')
-    title = 'Новый продукт'
+    extra_context = {'title': 'Новый продукт'}
 
 
-class ProductUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
+class ProductUpdateView(UpdateView, SuperUserRequiredMixin):
     model = Product
     form_class = ProductCreateForm
     template_name = 'adminapp/product_update.html'
     success_url = reverse_lazy('admin:product_view')
-    title = 'Редактирование продукта'
+    extra_context = {'title': 'Редактирование продукта'}
 
 
-class ProductDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
+class ProductDeleteView(DeleteView, SuperUserRequiredMixin):
     model = Product
     template_name = 'adminapp/product_delete.html'
     success_url = reverse_lazy('admin:product_view')
-    title = 'Удаление продукта'
+    extra_context = {'title': 'Удаление продукта'}
 

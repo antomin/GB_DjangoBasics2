@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 import authapp.views as authapp
@@ -5,8 +6,8 @@ import authapp.views as authapp
 app_name = 'authapp'
 
 urlpatterns = [
-    path('login/', authapp.login, name='login'),
-    path('registration/', authapp.registration, name='registration'),
-    path('profile/', authapp.profile, name='profile'),
-    path('logout/', authapp.logout, name='logout'),
+    path('login/', authapp.LoginView.as_view(), name='login'),
+    path('registration/', authapp.RegistrationView.as_view(), name='registration'),
+    path('profile/', authapp.ProfileView.as_view(), name='profile'),
+    path('logout/', LogoutView.as_view(template_name='mainapp/index.html'), name='logout'),
 ]
