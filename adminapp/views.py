@@ -1,85 +1,90 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import (CreateView, DeleteView, ListView,
+                                  TemplateView, UpdateView)
 
 from adminapp.forms import (CategoryCreationAdminForm,
-                            ProductCreationAdminForm, UserCreationAdminForm,
-                            UserEditAdminForm)
+                            ProductCreationAdminForm, ShopUserCreateAdminForm,
+                            ShopUserEditAdminForm)
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def index(request):
-    context = {
-        'title': 'Панель администратора'
-    }
-    return render(request, 'adminapp/admin.html', context)
+class Index(TemplateView):
+    template_name = 'adminapp/admin.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Index, self).get_context_data(**kwargs)
+        context['title'] = 'Панель администратора'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(Index, self).dispatch(request, *args, **kwargs)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_read(request):
-    context = {
-        'title': 'Пользователи',
-        'users': ShopUser.objects.all()
-    }
+class ShopUserListView(ListView):
+    model = ShopUser
+    template_name = 'adminapp/shopuser_list.html'
 
-    return render(request, 'adminapp/users.html', context)
+    def get_context_data(self, **kwargs):
+        context = super(ShopUserListView, self).get_context_data(**kwargs)
+        context['title'] = 'Пользователи'
+        return context
 
-
-@user_passes_test(lambda u: u.is_superuser)
-def user_create(request):
-    if request.method == 'POST':
-        form = UserCreationAdminForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admin:user_view'))
-        else:
-            print(form.errors)
-
-    context = {
-        'title': 'Новый пользователь',
-        'form': UserCreationAdminForm(),
-    }
-
-    return render(request, 'adminapp/users_create.html', context)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ShopUserListView, self).dispatch(request, *args, **kwargs)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_edit(request, user_pk):
-    edited_user = get_object_or_404(ShopUser, pk=user_pk)
-    if request.method == 'POST':
-        form = UserEditAdminForm(data=request.POST, instance=edited_user, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admin:user_view'))
-        else:
-            print(form.errors)
+class ShopUserCreateView(CreateView):
+    model = ShopUser
+    form_class = ShopUserCreateAdminForm
+    template_name = 'adminapp/shopuser_create.html'
+    success_url = reverse_lazy('admin:user_view')
 
-    context = {
-        'title': f'Редактирование пользователя {edited_user.username}',
-        'form': UserEditAdminForm(instance=edited_user),
-        'edited_user': edited_user
-    }
+    def get_context_data(self, **kwargs):
+        context = super(ShopUserCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Новый пользователь'
+        return context
 
-    return render(request, 'adminapp/users_edit.html', context)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ShopUserCreateView, self).dispatch(request, *args, **kwargs)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def user_delete(request, user_pk):
-    deleted_user = get_object_or_404(ShopUser, pk=user_pk)
-    if request.method == 'POST':
-        deleted_user.is_active = False
-        deleted_user.save()
-        return HttpResponseRedirect(reverse('admin:user_view'))
+class ShopUserUpdateView(UpdateView):
+    model = ShopUser
+    form_class = ShopUserEditAdminForm
+    template_name = 'adminapp/shopuser_update.html'
+    success_url = reverse_lazy('admin:user_view')
 
-    context = {
-        'title': 'Удаление пользователя',
-        'deleted_user': deleted_user,
-    }
+    def get_context_data(self, **kwargs):
+        context = super(ShopUserUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Редактирование пользователя'
+        return context
 
-    return render(request, 'adminapp/users_delete.html', context)
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ShopUserUpdateView, self).dispatch(request, *args, **kwargs)
+
+
+class ShopUserDeleteView(DeleteView):
+    model = ShopUser
+    template_name = 'adminapp/shopuser_delete.html'
+    success_url = reverse_lazy('admin:user_view')
+
+    def get_context_data(self, **kwargs):
+        context = super(ShopUserDeleteView, self).get_context_data(**kwargs)
+        context['title'] = 'Редактирование пользователя'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(ShopUserDeleteView, self).dispatch(request, *args, **kwargs)
 
 
 @user_passes_test(lambda u: u.is_superuser)

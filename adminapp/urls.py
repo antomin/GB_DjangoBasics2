@@ -5,12 +5,12 @@ import adminapp.views as adminapp
 app_name = 'adminapp'
 
 urlpatterns = [
-    path('', adminapp.index, name='index'),
+    path('', adminapp.Index.as_view(), name='index'),
 
-    path('users/', adminapp.user_read, name='user_view'),
-    path('users/create/', adminapp.user_create, name='user_create'),
-    path('users/edit/<int:user_pk>/', adminapp.user_edit, name='user_edit'),
-    path('users/delete/<int:user_pk>/', adminapp.user_delete, name='user_delete'),
+    path('users/', adminapp.ShopUserListView.as_view(), name='user_view'),
+    path('users/create/', adminapp.ShopUserCreateView.as_view(), name='user_create'),
+    path('users/edit/<int:pk>/', adminapp.ShopUserUpdateView.as_view(), name='user_edit'),
+    path('users/delete/<int:pk>/', adminapp.ShopUserDeleteView.as_view(), name='user_delete'),
 
     path('categories/', adminapp.category_read, name='category_view'),
     path('categories/create/', adminapp.category_create, name='category_create'),
