@@ -10,77 +10,58 @@ from adminapp.forms import (CategoryCreationAdminForm,
                             ProductCreationAdminForm, ShopUserCreateAdminForm,
                             ShopUserEditAdminForm)
 from authapp.models import ShopUser
+from mainapp.mixin import AddContextMixin, SuperUserRequiredMixin
 from mainapp.models import Product, ProductCategory
 
 
-class Index(TemplateView):
+class Index(TemplateView, AddContextMixin, SuperUserRequiredMixin):
     template_name = 'adminapp/admin.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(Index, self).get_context_data(**kwargs)
-        context['title'] = 'Панель администратора'
-        return context
+    title = 'Панель администратора'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(Index, self).dispatch(request, *args, **kwargs)
 
 
-class ShopUserListView(ListView):
+class ShopUserListView(ListView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
     template_name = 'adminapp/shopuser_list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ShopUserListView, self).get_context_data(**kwargs)
-        context['title'] = 'Пользователи'
-        return context
+    title = 'Пользователи'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(ShopUserListView, self).dispatch(request, *args, **kwargs)
 
 
-class ShopUserCreateView(CreateView):
+class ShopUserCreateView(CreateView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
     form_class = ShopUserCreateAdminForm
     template_name = 'adminapp/shopuser_create.html'
     success_url = reverse_lazy('admin:user_view')
-
-    def get_context_data(self, **kwargs):
-        context = super(ShopUserCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Новый пользователь'
-        return context
+    title = 'Новый пользователь'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(ShopUserCreateView, self).dispatch(request, *args, **kwargs)
 
 
-class ShopUserUpdateView(UpdateView):
+class ShopUserUpdateView(UpdateView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
     form_class = ShopUserEditAdminForm
     template_name = 'adminapp/shopuser_update.html'
     success_url = reverse_lazy('admin:user_view')
-
-    def get_context_data(self, **kwargs):
-        context = super(ShopUserUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Редактирование пользователя'
-        return context
+    title = 'Редактирование пользователя'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(ShopUserUpdateView, self).dispatch(request, *args, **kwargs)
 
 
-class ShopUserDeleteView(DeleteView):
+class ShopUserDeleteView(DeleteView, AddContextMixin, SuperUserRequiredMixin):
     model = ShopUser
     template_name = 'adminapp/shopuser_delete.html'
     success_url = reverse_lazy('admin:user_view')
-
-    def get_context_data(self, **kwargs):
-        context = super(ShopUserDeleteView, self).get_context_data(**kwargs)
-        context['title'] = 'Редактирование пользователя'
-        return context
+    title = 'Удаление пользователя'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
