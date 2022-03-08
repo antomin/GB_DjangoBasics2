@@ -17,16 +17,16 @@ class ShopUserCreateAdminForm(ShopUserRegistrationForm):
 
 
 class ShopUserEditAdminForm(ShopUserEditForm):
+    class Meta:
+        model = ShopUser
+        fields = ('first_name', 'last_name', 'avatar', 'age', 'email', 'username', 'is_active', 'is_staff')
+        widgets = {'avatar': FileInput()}
+
     def __init__(self, *args, **kwargs):
         super(ShopUserEditForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['avatar'].widget.attrs['class'] = 'custom-file-label'
-
-    class Meta:
-        model = ShopUser
-        fields = ('first_name', 'last_name', 'avatar', 'age', 'email', 'username', 'is_active', 'is_staff')
-        widgets = {'avatar': FileInput()}
 
 
 class ProductCategoryCreateForm(forms.ModelForm):
@@ -40,14 +40,14 @@ class ProductCategoryCreateForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
 
-class ProductCreationAdminForm(forms.ModelForm):
+class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('name', 'category', 'description', 'image_url', 'price', 'quantity', 'is_active')
         widgets = {'image_url': FileInput()}
 
     def __init__(self, *args, **kwargs):
-        super(ProductCreationAdminForm, self).__init__(*args, **kwargs)
+        super(ProductCreateForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image_url'].widget.attrs['class'] = 'custom-file-label'

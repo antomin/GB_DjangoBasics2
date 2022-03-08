@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Имя</th>
@@ -23,9 +23,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for product in products %}
-                                <tr class="{% if not user.is_active %}text-muted bg-light{% endif %}">
-                                    <td><a class="{% if not user.is_active %}text-muted{% endif %}"
+                            {% for product in object_list %}
+                                <tr class="{% if not product.is_active %}text-muted bg-light{% endif %}">
+                                    <td><a class="{% if not product.is_active %}text-muted{% endif %}"
                                            href="{% url 'admin:product_edit' product.pk %}"
                                            style="color: dodgerblue">{{ product.name }}</a></td>
                                     <td>{{ product.category }}</td>
