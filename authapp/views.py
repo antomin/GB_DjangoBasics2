@@ -11,13 +11,13 @@ from authapp.models import ShopUser
 from basketapp.models import Basket
 
 
-class LoginView(LoginView):
+class Login(LoginView):
     form_class = ShopUserLoginForm
     template_name = 'authapp/login.html'
     extra_context = {'title': 'вход'}
 
 
-class RegistrationView(CreateView):
+class Registration(CreateView):
     model = ShopUser
     form_class = ShopUserRegistrationForm
     template_name = 'authapp/registration.html'

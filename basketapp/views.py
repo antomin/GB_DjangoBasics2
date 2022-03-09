@@ -18,7 +18,6 @@ def basket_add(request, product_pk):
     basket.quantity += 1
     basket.save()
 
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return HttpResponseNotModified()
 
 

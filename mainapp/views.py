@@ -2,6 +2,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
+from django.views.generic import DetailView, ListView
 
 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
@@ -15,30 +16,42 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request, pk=None, page=1):
-    if pk:
-        products_list = Product.objects.filter(category__pk=pk, is_active=True)
-    else:
-        products_list = Product.objects.filter(is_active=True, category__is_active=True)
-
-    paginator = Paginator(products_list, 2)
-
-    try:
-        products_paginator = paginator.page(page)
-    except PageNotAnInteger:
-        products_paginator = paginator.page(1)
-    except EmptyPage:
-        products_paginator = paginator.page(paginator.num_pages)
-
-    context = {
+class ProductListView(ListView):
+    model = Product
+    template_name = 'mainapp/products.html'
+    queryset = Product.objects.filter(is_active=True)
+    paginate_by = 2
+    extra_context = {
         'title': 'каталог',
-        'categories': ProductCategory.objects.filter(is_active=True),
-        'products': products_paginator,
-        'basket': Basket.objects.filter(user=request.user),
+        'categories': ProductCategory.objects.filter(is_active=True)
+
     }
 
-    return render(request, 'mainapp/products.html', context)
-
+# def products(request, pk=None, page=1):
+#     if pk:
+#         products_list = Product.objects.filter(category__pk=pk, is_active=True)
+#     else:
+#         products_list = Product.objects.filter(is_active=True, category__is_active=True)
+#
+#     paginator = Paginator(products_list, 2)
+#
+#     try:
+#         products_paginator = paginator.page(page)
+#     except PageNotAnInteger:
+#         products_paginator = paginator.page(1)
+#     except EmptyPage:
+#         products_paginator = paginator.page(paginator.num_pages)
+#
+#     context = {
+#         'title': 'каталог',
+#         'categories': ProductCategory.objects.filter(is_active=True),
+#         'products': products_paginator,
+#         'basket': Basket.objects.filter(user=request.user),
+#     }
+#
+#     return render(request, 'mainapp/products.html', context)
+#
+#
 # def products(request, category_pk=None, page=1):
 #     if category_pk:
 #         products_list = Product.objects.filter(category__pk=category_pk, is_active=True)
@@ -70,11 +83,7 @@ def products(request, pk=None, page=1):
 #     return render(request, 'mainapp/product_list.html', context)
 
 
-def product(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-
-    context = {
-        'title': product.name,
-        'product': product,
-    }
-    return render(request, 'mainapp/product.html', context)
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'mainapp/product.html'
+    extra_context = {'title': 'продукт'}
