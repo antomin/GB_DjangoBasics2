@@ -3,9 +3,8 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Редактирование продукта {{ edited_product.name }}</h1>
-            <div class="card-body">
-                <form action="{% url 'admin:product_edit' edited_product.pk %}" method="post" enctype="multipart/form-data">
+            <h1 class="mt-4">Создание товара</h1>
+            <form action="{% url 'admin:product_create' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="col-lg-6">
@@ -20,7 +19,7 @@
                             {{ form.category }}
                         </div>
                     </div>
-                     <div class="col-lg-1 text-center">
+                    <div class="col-lg-1 text-center">
                         <div class="form-group">
                             <label class="small mb-1" for="{{ form.is_active.id_for_label }}">Активен</label>
                             {{ form.is_active }}
@@ -31,7 +30,8 @@
                     <div class="col-lg-12">
                         <div class="custom-file">
                             {{ form.image_url }}
-                            <label class="custom-file-label" for="{{ form.image_url.id_for_label }}">Выберите изображение</label>
+                            <label class="custom-file-label" for="{{ form.image_url.id_for_label }}">Выберите
+                                изображение</label>
                         </div>
                     </div>
                 </div>
@@ -57,12 +57,6 @@
                     </div>
                 </div>
             </form>
-                <div class="row">
-                    <div class="col-lg-12" style="margin-top: 33px;">
-                        <a class="btn btn-danger btn-block" href="{% url 'admin:product_delete' edited_product.pk %}">Удалить</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 {% endblock content %}

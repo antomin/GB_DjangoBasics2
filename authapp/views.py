@@ -1,69 +1,61 @@
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import HttpResponseRedirect, render
-from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView
 
 from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
                            ShopUserRegistrationForm)
+from authapp.models import ShopUser
 from basketapp.models import Basket
 
 
-def login(request):
-    if request.method == 'POST':
-        form = ShopUserLoginForm(data=request.POST)
+class Login(LoginView):
+    form_class = ShopUserLoginForm
+    template_name = 'authapp/login.html'
+    extra_context = {'title': 'вход'}
+
+
+class Registration(CreateView):
+    model = ShopUser
+    form_class = ShopUserRegistrationForm
+    template_name = 'authapp/registration.html'
+    success_url = reverse_lazy('auth:login')
+    extra_context = {'title': 'регистрация'}
+
+    def post(self, request, *args, **kwargs):
+        super(Registration, self).post(request, *args, **kwargs)
+        form = self.get_form()
         if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-
-    context = {
-        'title': 'вход',
-        'form': ShopUserLoginForm(),
-    }
-
-    return render(request, 'authapp/login.html', context)
-
-
-def registration(request):
-    if request.method == 'POST':
-        form = ShopUserRegistrationForm(data=request.POST)
-        if form.is_valid():
-            form.save()
             messages.success(request, 'Вы успешно зарегистрировались')
-            return HttpResponseRedirect(reverse('auth:login'))
-
-    context = {
-        'title': 'регистрация',
-        'form': ShopUserRegistrationForm()
-    }
-
-    return render(request, 'authapp/register.html', context)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = ShopUserEditForm(instance=request.user, data=request.POST, files=request.FILES)
+class ProfileView(UpdateView, LoginRequiredMixin):
+    model = ShopUser
+    form_class = ShopUserEditForm
+    template_name = 'authapp/profile.html'
+    success_url = reverse_lazy('auth:profile')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(ShopUser, pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['basket'] = Basket.objects.filter(user=self.request.user)
+        context['title'] = 'профиль'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        super(ProfileView, self).post(request, *args, **kwargs)
+        form = self.get_form()
         if form.is_valid():
-            form.save()
             messages.set_level(request, messages.SUCCESS)
-            messages.success(request, 'Данные обновлены', extra_tags='suc')
+            messages.success(request, 'Данные обновлены')
+            return self.form_valid(form)
         else:
             messages.error(request, list(form.errors.values())[0])
-
-    context = {
-        'title': 'профиль',
-        'form': ShopUserEditForm(instance=request.user),
-        'basket': Basket.objects.filter(user=request.user),
-    }
-
-    return render(request, 'authapp/profile.html', context)
-
-
-@login_required
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+            return self.form_invalid(form)

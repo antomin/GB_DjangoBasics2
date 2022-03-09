@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotModified, JsonResponse
-from django.shortcuts import HttpResponseRedirect, get_object_or_404, render
+from django.shortcuts import HttpResponseRedirect, get_object_or_404
 from django.template.loader import render_to_string
 
 from basketapp.models import Basket
@@ -18,7 +18,6 @@ def basket_add(request, product_pk):
     basket.quantity += 1
     basket.save()
 
-    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     return HttpResponseNotModified()
 
 

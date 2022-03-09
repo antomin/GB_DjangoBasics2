@@ -1,22 +1,27 @@
 <div class="row product-card">
-    {% for product in products %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <a href="{% url 'products:product' product.pk %}">
-                    <img class="card-img-top"
-                         src="{{ product.image_url.url }}" alt="">
-                </a>
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <a href="{% url 'products:product' product.pk %}">{{ product.name }}</a>
-                    </h4>
-                    <h5>{{ product.price }}p.</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                </div>
-                <div class="card-footer text-center">
-                    <a class="btn btn-outline-success" href="{% url 'basket:add' product.pk %}">Отправить в корзину</a>
+    {% if object_list %}
+        {% for product in object_list %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'products:product' product.pk %}">
+                        <img class="card-img-top"
+                             src="{{ product.image_url.url }}" alt="">
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="{% url 'products:product' product.pk %}">{{ product.name }}</a>
+                        </h4>
+                        <h5>{{ product.price }}p.</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a class="btn btn-outline-success" href="{% url 'basket:add' product.pk %}">Отправить в
+                            корзину</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p class="mx-auto">Продукты отсутствуют</p>
+    {% endif %}
 </div>

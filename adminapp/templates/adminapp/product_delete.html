@@ -3,9 +3,9 @@
 {% block content %}
     <main>
         <div class="container-fluid">
-            <h1 class="mt-4">Удаление пользователя {{ deleted_user.username }}</h1>
+            <h1 class="mt-4">Удаление продукта {{ object.name }}</h1>
         </div>
-        <form action="{% url 'admin:user_delete' deleted_user.pk %}" method="post">
+        <form action="{% url 'admin:product_delete' object.pk %}" method="post">
             {% csrf_token %}
             <div class="row text-center">
                 <div class="col-lg-6 ml-3" style="margin-top: 33px;">
