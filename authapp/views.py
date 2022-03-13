@@ -11,7 +11,6 @@ from django.views.generic import CreateView, UpdateView
 from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
                            ShopUserRegistrationForm)
 from authapp.models import ShopUser
-from basketapp.models import Basket
 
 
 class Login(LoginView):
@@ -65,15 +64,10 @@ class ProfileView(UpdateView, LoginRequiredMixin):
     form_class = ShopUserEditForm
     template_name = 'authapp/profile.html'
     success_url = reverse_lazy('auth:profile')
+    extra_context = {'title': 'профиль'}
 
     def get_object(self, queryset=None):
         return get_object_or_404(ShopUser, pk=self.request.user.pk)
-
-    def get_context_data(self, **kwargs):
-        context = super(ProfileView, self).get_context_data(**kwargs)
-        context['basket'] = Basket.objects.filter(user=self.request.user)
-        context['title'] = 'профиль'
-        return context
 
     def post(self, request, *args, **kwargs):
         super(ProfileView, self).post(request, *args, **kwargs)
