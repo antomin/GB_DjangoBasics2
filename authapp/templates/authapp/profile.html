@@ -60,7 +60,7 @@
                     {% if messages %}
                         <div class="form-row">
                             <div class="col-lg-12">
-                                <div class="alert alert-{% if messages.level == 25 %}success{% else %}warning{% endif %} alert-dismissible fade show"
+                                <div class="alert {% if messages.level == 25 %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show"
                                      role="alert"
                                      style="margin-top: 30px;">
                                     {% for message in messages %}

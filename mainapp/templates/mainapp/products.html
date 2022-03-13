@@ -52,19 +52,30 @@
                     {% include 'mainapp/includes/inc_product_list.html' %}
                 </div>
 
-{#                <nav aria-label="Page navigation example">#}
-{#                    <ul class="pagination justify-content-center">#}
-{#                        <li class="page-item {% if not products.has_previous %}disabled{% endif %}">#}
-{#                            <a class="page-link" href="{% url 'mainapp:page' categories.pk products.previous_page_number %}" tabindex="-1" aria-disabled="true">Previous</a>#}
-{#                        </li>#}
-{##}
-{#                        <li class="page-item"><a class="page-link" href="#">1</a></li>#}
-{##}
-{#                        <li class="page-item {% if not products.has_next %}disabled{% endif %}">#}
-{#                            <a class="page-link" href="{% url 'mainapp:page' categories.pk products.next_page_number %}">Next</a>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </nav>#}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item {% if not object_list.has_previous %}disabled{% endif %}">
+                            <a class="page-link"
+                               href="
+                                       {% if object_list.has_previous %}{% url 'mainapp:page' category.pk object_list.previous_page_number %}{% endif %}"
+                               aria-disabled="true">Previous</a>
+                        </li>
+
+                        {% for page in object_list.paginator.page_range %}
+                            <li class="page-item {% if request.resolver_match.kwargs.page == page %}disabled{% endif %}">
+                                <a class="page-link" href="{% url 'mainapp:page' category.pk page %}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+
+                        <li class="page-item {% if not object_list.has_next %}disabled{% endif %}">
+                            <a class="page-link"
+                               href="
+                                       {% if object_list.has_next %}{% url 'mainapp:page' category.pk object_list.next_page_number %}{% endif %}">Next</a>
+                        </li>
+
+                    </ul>
+                </nav>
 
             </div>
 
