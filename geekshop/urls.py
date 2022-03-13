@@ -2,11 +2,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
-import mainapp.views as mainapp
+from mainapp.views import Index
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', mainapp.Index.as_view(), name='index'),
+    path('', Index.as_view(), name='index'),
     path('products/', include('mainapp.urls', namespace='products')),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('basket/', include('basketapp.urls', namespace='basket')),
