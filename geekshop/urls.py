@@ -5,12 +5,12 @@ from django.urls import include, path
 from mainapp.views import Index
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     path('', Index.as_view(), name='index'),
     path('products/', include('mainapp.urls', namespace='products')),
     path('auth/', include('authapp.urls', namespace='auth')),
     path('basket/', include('basketapp.urls', namespace='basket')),
     path('admin/', include('adminapp.urls', namespace='admin')),
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:
