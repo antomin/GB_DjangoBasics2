@@ -17,6 +17,7 @@ class Login(LoginView):
     form_class = ShopUserLoginForm
     template_name = 'authapp/login.html'
     extra_context = {'title': 'вход'}
+    backand = ''
 
 
 class Registration(CreateView):
@@ -52,7 +53,7 @@ def verify(request, email, activation_key):
             user.activation_key = ''
             user.activation_key_expires = ''
             user.save()
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return render(request, 'authapp/verification.html')
     except Exception as e:
         print(e)
