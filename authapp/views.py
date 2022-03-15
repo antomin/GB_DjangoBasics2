@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from authapp.forms import (ShopUserEditForm, ShopUserLoginForm,
-                           ShopUserRegistrationForm)
+                           ShopUserProfileEditForm, ShopUserRegistrationForm)
 from authapp.models import ShopUser
 
 
@@ -65,18 +65,37 @@ class ProfileView(UpdateView, LoginRequiredMixin):
     form_class = ShopUserEditForm
     template_name = 'authapp/profile.html'
     success_url = reverse_lazy('auth:profile')
-    extra_context = {'title': 'профиль'}
 
     def get_object(self, queryset=None):
-        return get_object_or_404(ShopUser, pk=self.request.user.pk)
+        return get_object_or_404(self.model, pk=self.request.user.pk)
 
     def post(self, request, *args, **kwargs):
         super(ProfileView, self).post(request, *args, **kwargs)
         form = self.get_form()
-        if form.is_valid():
+        form_profile = ShopUserProfileEditForm(data=request.POST, instance=request.user.shopuserprofile)
+        if form.is_valid() and form_profile.is_valid():
             messages.set_level(request, messages.SUCCESS)
             messages.success(request, 'Данные обновлены')
-            return self.form_valid(form)
+            form.save()
+            form_profile.save()
         else:
             messages.error(request, list(form.errors.values())[0])
-            return self.form_invalid(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['title'] = 'профиль'
+        context['form_profile'] = ShopUserProfileEditForm(instance=self.request.user.shopuserprofile)
+        return context
+
+
+    # def post(self, request, *args, **kwargs):
+    #     super(ProfileView, self).post(request, *args, **kwargs)
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         messages.set_level(request, messages.SUCCESS)
+    #         messages.success(request, 'Данные обновлены')
+    #         return self.form_valid(form)
+    #     else:
+    #         messages.error(request, list(form.errors.values())[0])
+    #         return self.form_invalid(form)
