@@ -87,15 +87,3 @@ class ProfileView(UpdateView, LoginRequiredMixin):
         context['title'] = 'профиль'
         context['form_profile'] = ShopUserProfileEditForm(instance=self.request.user.shopuserprofile)
         return context
-
-
-    # def post(self, request, *args, **kwargs):
-    #     super(ProfileView, self).post(request, *args, **kwargs)
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         messages.set_level(request, messages.SUCCESS)
-    #         messages.success(request, 'Данные обновлены')
-    #         return self.form_valid(form)
-    #     else:
-    #         messages.error(request, list(form.errors.values())[0])
-    #         return self.form_invalid(form)
