@@ -52,9 +52,23 @@
                         </div>
                     </div>
                     <div class="form-row">
+                        <div class="col-lg-12">
+                            <label class="small mb-1" for="{{ form.tagline.id_for_label }}">Теги</label>
+                            {{ form_profile.tagline }}
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="col-lg-6">
                             <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                             {{ form.age }}
+                            <label class="small mb-1" for="{{ form_profile.gender.id_for_label }}">Пол</label>
+                            {{ form_profile.gender }}
+                            <label class="small mb-1" for="{{ form.gender.country.id_for_label }}">Страна</label>
+                            {{ form_profile.country }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="small mb-1" for="{{ form.about_me.id_for_label }}">О себе</label>
+                            {{ form_profile.about_me }}
                         </div>
                     </div>
                     {% if messages %}
@@ -74,7 +88,7 @@
                         </div>
                     {% endif %}
                     <div class="form-row">
-                        <div class="col-lg-12" style="margin-top: 33px;">
+                        <div class="col-lg-12 mb-2" style="margin-top: 33px;">
                             <input class="btn btn-info btn-block" type="submit" value="Сохранить">
                         </div>
                     </div>

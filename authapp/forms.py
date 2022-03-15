@@ -3,9 +3,9 @@ import random
 
 from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
                                        UserCreationForm)
-from django.forms import FileInput, forms
+from django.forms import FileInput, ModelForm, forms
 
-from authapp.models import ShopUser
+from authapp.models import ShopUser, ShopUserProfile
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -52,8 +52,8 @@ class ShopUserEditForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(ShopUserEditForm, self).__init__(*args, **kwargs)
-        for field_name, fielld in self.fields.items():
-            fielld.widget.attrs['class'] = 'form-control py-4'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
         self.fields['avatar'].widget.attrs['class'] = 'custom-file-label'
         self.fields['username'].widget.attrs['readonly'] = True
         self.fields['email'].widget.attrs['readonly'] = True
@@ -63,3 +63,17 @@ class ShopUserEditForm(UserChangeForm):
         if data < 18:
             raise forms.ValidationError('Регистрация с 18 лет.')
         return data
+
+
+class ShopUserProfileEditForm(ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        exclude = ('user',)
+
+    def __init__(self, *args, **kwargs):
+        super(ShopUserProfileEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name != 'gender':
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'
