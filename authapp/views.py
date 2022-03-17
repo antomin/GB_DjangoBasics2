@@ -60,7 +60,7 @@ def verify(request, email, activation_key):
         HttpResponseRedirect(reverse('index'))
 
 
-class ProfileView(UpdateView, LoginRequiredMixin):
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = ShopUser
     form_class = ShopUserEditForm
     template_name = 'authapp/profile.html'
