@@ -2,11 +2,13 @@ from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, ListView,
                                   TemplateView, UpdateView)
 
-from adminapp.forms import (ProductCategoryCreateForm, ProductCreateForm,
-                            ShopUserCreateAdminForm, ShopUserEditAdminForm)
+from adminapp.forms import (OrderEditForm, ProductCategoryCreateForm,
+                            ProductCreateForm, ShopUserCreateAdminForm,
+                            ShopUserEditAdminForm)
 from authapp.models import ShopUser
 from mainapp.mixin import SuperUserRequiredMixin
 from mainapp.models import Product, ProductCategory
+from ordersapp.models import Order
 
 
 class Index(TemplateView, SuperUserRequiredMixin):
@@ -102,4 +104,19 @@ class ProductDeleteView(DeleteView, SuperUserRequiredMixin):
     template_name = 'adminapp/product_delete.html'
     success_url = reverse_lazy('admin:product_view')
     extra_context = {'title': 'Удаление продукта'}
+
+
+class OrderListView(ListView, SuperUserRequiredMixin):
+    model = Order
+    template_name = 'adminapp/order_list.html'
+    ordering = ('-is_active',)
+    extra_context = {'title': 'Заказы'}
+
+
+class OrderListUpdate(UpdateView, SuperUserRequiredMixin):
+    model = Order
+    template_name = 'adminapp/order_update.html'
+    form_class = OrderEditForm
+    success_url = reverse_lazy('admin:order_view')
+    extra_context = {'title': 'Редактирование заказа'}
 
