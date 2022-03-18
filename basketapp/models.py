@@ -21,3 +21,6 @@ class Basket(models.Model):
     def total_quantity(self):
         all_baskets = Basket.objects.filter(user=self.user)
         return sum(basket.quantity for basket in all_baskets)
+
+    # def get_items(self):
+    #     return self.objects.filter(user=self.user)
