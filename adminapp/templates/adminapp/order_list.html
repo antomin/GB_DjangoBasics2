@@ -1,0 +1,39 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <div class="text-center">
+        <table class="table orders_list">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Пользователь</th>
+                <th>Создан</th>
+                <th>Обновлен</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in object_list %}
+                <tr class="{% if not item.is_active %}text-muted{% endif %}">
+                    <td class="td1 orders_list">{{ item.pk }}</td>
+                    <td>{{ item.user }}</td>
+                    <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+                    <td>
+                        {% if item.is_active %}
+                            {{ item.get_status_display }}
+                        {% else %}
+                            удалён
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="{% if not item.is_active %}text-muted{% endif %}"
+                           href="{% url 'admin:order_update' item.pk %}">редактировать
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

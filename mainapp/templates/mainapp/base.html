@@ -32,7 +32,8 @@
             <div class="navbar-text">{% now "d F Y" %}</div>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'mainapp:products' 0 %}">Каталог <i class="fas fa-shopping-bag"></i>
+                    <a class="nav-link" href="{% url 'mainapp:products' 0 %}">Каталог <i
+                            class="fas fa-shopping-bag"></i>
                     </a>
                 </li>
                 {% if not user.is_authenticated %}
@@ -40,16 +41,29 @@
                         <a class="nav-link" href="{% url 'auth:login' %}">Войти <i class="fas fa-sign-in-alt"></i></a>
                     </li>
                 {% else %}
+
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'auth:profile' %}">
-                            {% if user.first_name %}
-                                {{ user.first_name }}
-                            {% else %}
-                                {{ user.username }}
-                            {% endif %}
-                            <i class="fas fa-user-circle"></i>
-                        </a>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown">
+                                {% if user.first_name %}
+                                    {{ user.first_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <ul class="dropdown-menu bg-dark">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'auth:profile' %}">Профиль</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'orders:list' %}">Заказы</a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </li>
+
                     {% if user.is_superuser %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admin:index' %}">

@@ -1,0 +1,11 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <form action="{% url 'admin:order_update' object.pk %}" method="post">
+        <div class="col-lg-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+        </div>
+    </form>
+{% endblock content %}

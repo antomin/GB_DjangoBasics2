@@ -4,6 +4,7 @@ from django.forms import FileInput
 from authapp.forms import ShopUserEditForm, ShopUserRegistrationForm
 from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
+from ordersapp.models import Order
 
 
 class ShopUserCreateAdminForm(ShopUserRegistrationForm):
@@ -51,3 +52,14 @@ class ProductCreateForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image_url'].widget.attrs['class'] = 'custom-file-label'
+
+
+class OrderEditForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('status', 'is_active')
+
+    def __init__(self, *args, **kwargs):
+        super(OrderEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
