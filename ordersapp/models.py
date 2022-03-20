@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import get_object_or_404
 
 from mainapp.models import Product
 
@@ -49,10 +50,36 @@ class Order(models.Model):
         self.save()
 
 
+class OrderItemQuerySet(models.QuerySet):
+    def delete(self):
+        for item in self:
+            item.product.quantity += item.quantity
+            item.product.save()
+        super(OrderItemQuerySet, self).delete()
+    
+    
 class OrderItem(models.Model):
+    objects = OrderItemQuerySet.as_manager()
     order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):
         return self.quantity * self.product.price
+
+    @staticmethod
+    def get_item(pk):
+        return get_object_or_404(OrderItem, pk=pk)
+    
+    def delete(self, using=None, keep_parents=False):
+        self.product.quantity += self.quantity
+        self.product.save()
+        super(OrderItem, self).delete()
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.pk:
+            self.product.quantity -= self.quantity - OrderItem.get_item(self.pk).quantity
+        else:
+            self.product.quantity -= self.quantity
+        self.product.save()
+        super(OrderItem, self).save()
