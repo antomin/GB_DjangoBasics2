@@ -37,11 +37,11 @@ window.onload = () => {
     });
 
 
-    $('.order_form').on('change', 'input[type="checkbox"]', ({target}) => {
-        orderitem_num = parseInt((target.name.replace('orderitems-', '').replace('-DELETE', '')));
-        delta_quantity = quantity_arr[orderitem_num] * (target.checked ? -1 : 1);
-        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
-    });
+    // $('.order_form').on('change', 'input[type="checkbox"]', ({target}) => {
+    //     orderitem_num = parseInt((target.name.replace('orderitems-', '').replace('-DELETE', '')));
+    //     delta_quantity = quantity_arr[orderitem_num] * (target.checked ? -1 : 1);
+    //     orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+    // });
 
 
     function orderSummaryUpdate(orderitem_price, delta_quantity) {
@@ -53,4 +53,25 @@ window.onload = () => {
         $('.order_total_cost').html(total_cost.toString());
         $('.order_total_quantity').html(total_quantity.toString());
     }
+
+
+    // Django-dinamic-formset
+    $('.formset_row').formset({
+        addText: 'добавить продукт',
+        addCssClass: 'btn btn-warning btn-round form-control w-25 my-2 last',
+        deleteText: 'X',
+        deleteCssClass: 'btn btn-danger btn-round form-control',
+        prefix: 'orderitems',
+        removed: deleteOrderItem
+    });
+
+    function deleteOrderItem(row) {
+        let target_name = row[0].querySelector('input[type="number"]').name;
+        orderitem_num = parseInt((target_name.replace('orderitems-', '').replace('-DELETE', '')));
+        delta_quantity = -quantity_arr[orderitem_num];
+        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity)
+    }
+
+    // Ajax price add
+
 }
