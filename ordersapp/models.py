@@ -55,4 +55,4 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):
-        return self.product.quantity * self.product.price
+        return self.quantity * self.product.price
