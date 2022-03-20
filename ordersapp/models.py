@@ -42,7 +42,7 @@ class Order(models.Model):
         items = self.orderitems.select_related()
         return sum(list(map(lambda x: x.get_product_cost(), items)))
 
-    def delete(self):
+    def delete(self,  using=None, keep_parents=False):
         for item in self.orderitems.select_related():
             item.product.quantity += item.quantity
             item.product.save()
@@ -50,16 +50,7 @@ class Order(models.Model):
         self.save()
 
 
-class OrderItemQuerySet(models.QuerySet):
-    def delete(self):
-        for item in self:
-            item.product.quantity += item.quantity
-            item.product.save()
-        super(OrderItemQuerySet, self).delete()
-    
-    
 class OrderItem(models.Model):
-    objects = OrderItemQuerySet.as_manager()
     order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='продукт', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
@@ -70,16 +61,3 @@ class OrderItem(models.Model):
     @staticmethod
     def get_item(pk):
         return get_object_or_404(OrderItem, pk=pk)
-    
-    def delete(self, using=None, keep_parents=False):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super(OrderItem, self).delete()
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        if self.pk:
-            self.product.quantity -= self.quantity - OrderItem.get_item(self.pk).quantity
-        else:
-            self.product.quantity -= self.quantity
-        self.product.save()
-        super(OrderItem, self).save()
