@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import get_object_or_404
 
 from mainapp.models import Product
 
@@ -41,7 +42,7 @@ class Order(models.Model):
         items = self.orderitems.select_related()
         return sum(list(map(lambda x: x.get_product_cost(), items)))
 
-    def delete(self):
+    def delete(self,  using=None, keep_parents=False):
         for item in self.orderitems.select_related():
             item.product.quantity += item.quantity
             item.product.save()
@@ -55,4 +56,8 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
 
     def get_product_cost(self):
-        return self.product.quantity * self.product.price
+        return self.quantity * self.product.price
+
+    @staticmethod
+    def get_item(pk):
+        return get_object_or_404(OrderItem, pk=pk)

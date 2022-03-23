@@ -86,12 +86,17 @@
 {% block footer %}
 {% endblock footer %}
 
-<!-- Bootstrap core JavaScript -->
+<!-- jquery library -->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.formset.js' %}"></script>
+
+<!-- Bootstrap core JavaScript -->
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
 <!-- FontAwesome script -->
 <script src="{% static 'vendor/fontawesome/fontawesome-icons.js' %}" crossorigin="anonymous"></script>
+
+<script src="{% static 'js/orders_script.js' %}"></script>
 
 {% block js %}
 {% endblock js %}
