@@ -2,7 +2,7 @@
 
 window.onload = () => {
     let TOTAL_FORMS = parseInt($('input[name="orderitems-TOTAL_FORMS"]').val());
-    let price, quantity, orderitem_num, orderitem_quantity, delta_quantity, delta_cost;
+    let price, quantity, orderitem_num, orderitem_quantity, delta_quantity, delta_cost, product_pk;
     let total_cost = parseFloat($('.order_total_cost').text()) || 0;
     let total_quantity = parseInt($('.order_total_quantity').text()) || 0;
     let price_arr = [];
@@ -36,14 +36,6 @@ window.onload = () => {
         }
     });
 
-
-    // $('.order_form').on('change', 'input[type="checkbox"]', ({target}) => {
-    //     orderitem_num = parseInt((target.name.replace('orderitems-', '').replace('-DELETE', '')));
-    //     delta_quantity = quantity_arr[orderitem_num] * (target.checked ? -1 : 1);
-    //     orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
-    // });
-
-
     function orderSummaryUpdate(orderitem_price, delta_quantity) {
         delta_cost = orderitem_price * delta_quantity;
 
@@ -69,9 +61,21 @@ window.onload = () => {
         let target_name = row[0].querySelector('input[type="number"]').name;
         orderitem_num = parseInt((target_name.replace('orderitems-', '').replace('-DELETE', '')));
         delta_quantity = -quantity_arr[orderitem_num];
-        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity)
+        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     }
 
     // Ajax price add
+    $('.order_form').on('change', 'select', ({target}) => {
+        orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
+        product_pk = parseInt(target.value);
 
+        $.ajax({
+            url: '/orders/get_price/' + product_pk + '/',
+            success: (data) => {
+                $('.orderitems-' + orderitem_num + '-price').html(data.price + ' руб');
+                price_arr[orderitem_num] = parseFloat(data.price);
+                orderSummaryUpdate(price_arr[orderitem_num], 0)
+            }
+        });
+    });
 }
