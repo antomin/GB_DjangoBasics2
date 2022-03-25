@@ -13,6 +13,10 @@ import json
 import os
 from pathlib import Path
 
+# Load secrets
+with open('tmp/secrets.json') as jfile:
+    SEC_DATA = json.load(jfile)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bkw(@2ov9)f!7%l27vwgab8bvfhew30eq(1=y@-@^vjt$pns+c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -85,6 +89,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    } if DEBUG else {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': SEC_DATA['POSTGRESQL_SETTINGS']['NAME'],
+            'USER': SEC_DATA['POSTGRESQL_SETTINGS']['USER'],
+            'PASSWORD': SEC_DATA['POSTGRESQL_SETTINGS']['PASSWORD']
+        }
     }
 }
 
@@ -148,10 +159,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL = '/'
 
 DOMAIN_NAME = 'http://127.0.0.1:8000'
-
-# Load secrets
-with open('tmp/secrets.json') as jfile:
-    SEC_DATA = json.load(jfile)
 
 # SMTP settings
 EMAIL_HOST = 'smtp.mail.ru'
